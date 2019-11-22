@@ -26,8 +26,6 @@ public class CRC {
 
         int total_bits = data.length + generated.length - 1;
         appended = new int[total_bits];
-        transmitted = new int[total_bits];
-
         System.arraycopy(data, 0, appended, 0, data.length);
 
         System.out.println("Message bits: " + bitsToString(data));
@@ -35,9 +33,7 @@ public class CRC {
         System.out.println("Appended message: " + bitsToString(appended));
 
         remainder = binMod(appended, generated);
-        for (int i = 0; i < appended.length; i++) {
-            transmitted[i] = appended[i] ^ remainder[i];
-        }
+        transmitted = binSub(appended, remainder);
 
         System.out.println("Transmitted message: " + bitsToString(transmitted));
         System.out.print("Enter received message of " + total_bits + " bits: ");
@@ -55,6 +51,14 @@ public class CRC {
             }
         }
         System.out.println("There is no error");
+    }
+
+    static int[] binSub(int[] a, int[] b) {
+        int[] sub = new int[a.length];
+        for (int i = 0; i < a.length; i++) {
+            sub[i] = a[i] ^ b[i];
+        }
+        return sub;
     }
 
     static int[] binMod(int[] dividend, int[] divisor) {
@@ -75,7 +79,7 @@ public class CRC {
 
     static String bitsToString(int[] bits) {
         StringBuilder str = new StringBuilder();
-        for (int i: bits) {
+        for (int i : bits) {
             str.append(i).append(" ");
         }
         return str.toString();
