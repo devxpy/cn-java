@@ -34,7 +34,7 @@ public class CRC {
         System.out.println("Generated bits: " + bitsToString(generated));
         System.out.println("Appended message: " + bitsToString(appended));
 
-        remainder = calcBinDivRem(appended, generated);
+        remainder = binMod(appended, generated);
         for (int i = 0; i < appended.length; i++) {
             transmitted[i] = appended[i] ^ remainder[i];
         }
@@ -47,7 +47,7 @@ public class CRC {
 
         System.out.println("Received message: " + bitsToString(transmitted));
 
-        remainder = calcBinDivRem(transmitted, generated);
+        remainder = binMod(transmitted, generated);
         for (int i : remainder) {
             if (i != 0) {
                 System.out.println("There is error!");
@@ -57,7 +57,7 @@ public class CRC {
         System.out.println("There is no error");
     }
 
-    static int[] calcBinDivRem(int[] dividend, int[] divisor) {
+    static int[] binMod(int[] dividend, int[] divisor) {
         int[] remainder = dividend.clone();
         int offset = 0;
 
@@ -76,7 +76,7 @@ public class CRC {
     static String bitsToString(int[] bits) {
         StringBuilder str = new StringBuilder();
         for (int i: bits) {
-            str.append(i + " ");
+            str.append(i).append(" ");
         }
         return str.toString();
     }
