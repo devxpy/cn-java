@@ -23,14 +23,13 @@ public class CRC {
         System.out.println("Appended message: " + bitsToString(appended));
 
         int[] transmitted = binSub(appended, binMod(appended, generated));
-
         System.out.println("Transmitted message: " + bitsToString(transmitted));
+
         System.out.print("Enter received message of " + total_bits + " bits: ");
-        transmitted = nextBits(in, transmitted.length);
+        int[] received = nextBits(in, transmitted.length);
+        System.out.println("Received message: " + bitsToString(received));
 
-        System.out.println("Received message: " + bitsToString(transmitted));
-
-        int[] remainder = binMod(transmitted, generated);
+        int[] remainder = binMod(received, generated);
         for (int i : remainder) {
             if (i != 0) {
                 System.out.println("There is error!");
