@@ -2,48 +2,35 @@ import java.util.Scanner;
 
 public class CRC {
     public static void main(String[] args) {
-        int[] data;
-        int[] generated;
-        int[] remainder;
-        int[] appended;
-        int[] transmitted;
-
         Scanner in = new Scanner(System.in);
 
         System.out.print("Enter the no of bits in the message: ");
-        data = new int[in.nextInt()];
+        int len = in.nextInt();
         System.out.print("Enter the message bits: ");
-        for (int i = 0; i < data.length; i++) {
-            data[i] = in.nextInt();
-        }
+        int[] data = nextBits(in, len);
 
         System.out.print("Enter the no of generated bits: ");
-        generated = new int[in.nextInt()];
+        len  = in.nextInt();
         System.out.print("Enter the generated bits: ");
-        for (int i = 0; i < generated.length; i++) {
-            generated[i] = in.nextInt();
-        }
+        int[] generated = nextBits(in, len);
 
         int total_bits = data.length + generated.length - 1;
-        appended = new int[total_bits];
+        int[] appended = new int[total_bits];
         System.arraycopy(data, 0, appended, 0, data.length);
 
         System.out.println("Message bits: " + bitsToString(data));
         System.out.println("Generated bits: " + bitsToString(generated));
         System.out.println("Appended message: " + bitsToString(appended));
 
-        remainder = binMod(appended, generated);
-        transmitted = binSub(appended, remainder);
+        int[] transmitted = binSub(appended, binMod(appended, generated));
 
         System.out.println("Transmitted message: " + bitsToString(transmitted));
         System.out.print("Enter received message of " + total_bits + " bits: ");
-        for (int i = 0; i < transmitted.length; i++) {
-            transmitted[i] = in.nextInt();
-        }
+        transmitted = nextBits(in, transmitted.length);
 
         System.out.println("Received message: " + bitsToString(transmitted));
 
-        remainder = binMod(transmitted, generated);
+        int[] remainder = binMod(transmitted, generated);
         for (int i : remainder) {
             if (i != 0) {
                 System.out.println("There is error!");
@@ -51,6 +38,14 @@ public class CRC {
             }
         }
         System.out.println("There is no error");
+    }
+
+    static int[] nextBits(Scanner in, int len) {
+        int[] bits = new int[len];
+        for (int i = 0; i < bits.length; i++) {
+            bits[i] = in.nextInt();
+        }
+        return bits;
     }
 
     static int[] binSub(int[] a, int[] b) {
